@@ -1,0 +1,5 @@
+--first: create the Database name 'PoultryFinal' in mssql.
+--second: change the server name in appsettings.json to your local server name.
+--third: Add-Migration 'migrationName' in pacakage manager console.
+--fourth: Update-database in pacakage manager console.
+--note:you have to set a two roles , Admin and Doctor from the mssql in tblRoles table.

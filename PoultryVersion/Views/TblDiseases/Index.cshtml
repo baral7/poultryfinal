@@ -1,0 +1,157 @@
+﻿@model IEnumerable<PoultryVersion.Models.TblDisease>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>DISEASE</h1>
+
+<p>
+    @if (@User.Identity.IsAuthenticated)
+    {
+        if (@User.IsInRole("Admin"))
+        {
+
+            <a class="text-decoration-none" asp-action="Create">Create New <i class="fa-solid fa-circle-plus"></i></a>
+
+        } }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiseaseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EffectiveNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfDead)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Poultry)
+            </th>
+              <th>
+                @Html.DisplayNameFor(model => model.FeedBack)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td value="check"> 
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiseaseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EffectiveNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoOfDead)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Poultry.Name)
+                </td>
+                 <td>
+                    @Html.DisplayFor(modelItem => item.FeedBack)
+                </td>
+                <td>
+                    @if (@User.Identity.IsAuthenticated)
+                    {
+                        if (@User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>
+                
+                    <a asp-action = "Delete" asp-route-id = "@item.Id" ><i class="fa-solid fa-trash"></i></a>
+                            } }
+            </td>
+                     
+            @if(@User.Identity.IsAuthenticated)
+                {
+                    if (@User.IsInRole("Doctor"))
+                    {
+                    
+                        <td>
+                   
+                        <input type="Text"  class="form-control" id="FeedBack"/>
+                        </td>
+                        <td>
+                            <input type="submit" class="complete"/>
+                        </td>
+                    }
+                }
+                
+        </tr>
+}
+    </tbody>
+</table>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+$(document).ready(function(){
+     console.log("kfjdfk");
+
+    $(".complete").click(function(e) {
+        e.preventDefault();
+
+        // var id =  $(this).attr("#data-value");
+        console.log("kfjdfk");
+
+
+        var DiseaseID = $(this).closest('tr').find("td:eq(0)").text().toString();
+        //   var mid = parseInt(msid);
+
+
+        var FeedBack = $("#FeedBack").val();
+        //   var Amid = parseInt(Asmid);
+
+        // var Completeimg = $(this).closest('tr').find("td:eq(5)").val();
+        // var files = $('#PhotoSend').get(0).files;
+        console.log(DiseaseID);
+        console.log(FeedBack);
+        var fileData = new FormData();
+        fileData.append('DiseaseID', DiseaseID);
+        fileData.append('FeedBack',FeedBack);
+
+
+
+        //   console.log("Hello")
+        $.ajax({
+
+            'url': '@Url.Action("FeedBack","TblDiseases")',
+            'type': 'Post',
+            'processData': false,
+            'contentType': false,
+            'cache': false,
+            'data': fileData,
+            'enctype': 'multipart/form-data',
+            'success': function() {
+
+            
+                $("#FeedBack").val("");
+                //Error Occur But why ????? So i comment out the Redirect location
+
+                window.location.href = '@Url.Action("Index","TblDiseases")';
+
+            },
+            'error': function() {
+
+              //  window.location.href = '@Url.Action("Assign","Users")';
+            }
+        });
+    })
+})
+</script>
